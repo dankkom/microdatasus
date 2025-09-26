@@ -1,3 +1,6 @@
+# microdatasus 2.4.3
+* Remove `dtplyr` usage due incompatibility on recent version.
+
 # microdatasus 2.4.2
 * Fix error when processing data with `process_sinan_chikungunya()`.
 
