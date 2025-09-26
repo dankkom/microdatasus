@@ -17,25 +17,33 @@
 #'
 #' @export
 
-process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nomes = FALSE, municipality_data = TRUE) {
+process_cnes <- function(
+  data,
+  information_system = c("CNES-ST", "CNES-PF"),
+  nomes = FALSE,
+  municipality_data = TRUE
+) {
   # Check information system
-  checkmate::assert_choice(x = information_system, choices = c("CNES-ST", "CNES-PF"))
+  checkmate::assert_choice(
+    x = information_system,
+    choices = c("CNES-ST", "CNES-PF")
+  )
 
   # Variables names
   variables_names <- names(data)
 
   # Use dtplyr
-  data <- dtplyr::lazy_dt(data)
+  # data <- dtplyr::lazy_dt(data)
 
-  if(information_system == "CNES-ST"){
+  if (information_system == "CNES-ST") {
     # CNES
-    if("CNES" %in% variables_names){
+    if ("CNES" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(CNES = as.character(.data$CNES))
     }
 
     # Nome fantasia e razão social
-    if(nomes == TRUE){
+    if (nomes == TRUE) {
       cadger_temp <- microdatasus::fetch_cadger()
       data <- data %>%
         dplyr::left_join(cadger_temp, by = "CNES")
@@ -51,19 +59,19 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # COD_CEP
-    if("COD_CEP" %in% variables_names){
+    if ("COD_CEP" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(COD_CEP = as.integer(.data$COD_CEP))
     }
 
     # CPF_CNPJ
-    if("CPF_CNPJ" %in% variables_names){
+    if ("CPF_CNPJ" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(CPF_CNPJ = as.character(.data$CPF_CNPJ))
     }
 
     # PF_PJ
-    if("PF_PJ" %in% variables_names){
+    if ("PF_PJ" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           PF_PJ = dplyr::case_match(
@@ -77,7 +85,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # NIV_DEP
-    if("NIV_DEP" %in% variables_names){
+    if ("NIV_DEP" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           NIV_DEP = dplyr::case_match(
@@ -91,13 +99,13 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # CNPJ_MAN
-    if("CNPJ_MAN" %in% variables_names){
+    if ("CNPJ_MAN" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(CNPJ_MAN = as.numeric(.data$CNPJ_MAN))
     }
 
     # COD_IR
-    if("COD_IR" %in% variables_names){
+    if ("COD_IR" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           COD_IR = dplyr::case_match(
@@ -118,25 +126,25 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # REGSAUDE
-    if("REGSAUDE" %in% variables_names){
+    if ("REGSAUDE" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(REGSAUDE = as.character(.data$REGSAUDE))
     }
 
     # MICR_REG
-    if("MICR_REG" %in% variables_names){
+    if ("MICR_REG" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(MICR_REG = as.integer(.data$MICR_REG))
     }
 
     # DISTRSAN
-    if("DISTRSAN" %in% variables_names){
+    if ("DISTRSAN" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(DISTRSAN = as.integer(.data$DISTRSAN))
     }
 
     # VINC_SUS
-    if("VINC_SUS" %in% variables_names){
+    if ("VINC_SUS" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           VINC_SUS = dplyr::case_match(
@@ -151,7 +159,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # TPGESTAO
-    if("TPGESTAO" %in% variables_names){
+    if ("TPGESTAO" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           TPGESTAO = dplyr::case_match(
@@ -168,7 +176,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # ESFERA_A
-    if("ESFERA_A" %in% variables_names){
+    if ("ESFERA_A" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           ESFERA_A = dplyr::case_match(
@@ -185,7 +193,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # RETENCAO
-    if("RETENCAO" %in% variables_names){
+    if ("RETENCAO" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           RETENCAO = dplyr::case_match(
@@ -205,7 +213,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # ATIVIDAD
-    if("ATIVIDAD" %in% variables_names){
+    if ("ATIVIDAD" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           ATIVIDAD = dplyr::case_match(
@@ -223,13 +231,14 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # NATUREZA
-    if("NATUREZA" %in% variables_names){
+    if ("NATUREZA" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           NATUREZA = dplyr::case_match(
             .data$NATUREZA,
             "-99" ~ NA,
-            "1" ~ "Administra\u00e7\u00e3o Direta da Sa\u00fade (MS, SES, e SMS)",
+            "1" ~
+              "Administra\u00e7\u00e3o Direta da Sa\u00fade (MS, SES, e SMS)",
             "2" ~ "Adm Direta outros org\u00e3os (MEX, MEx, Marinha,...)",
             "3" ~ "Adm Indireta - Autarquias",
             "4" ~ "Adm Indireta - Funda\u00e7\u00e3o P\u00fablica",
@@ -250,37 +259,52 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # NAT_JUR
-    if("NAT_JUR" %in% variables_names){
+    if ("NAT_JUR" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           NAT_JUR = dplyr::case_match(
             .data$NAT_JUR,
             "1015" ~ "\u00d3rg\u00e3o P\u00fablico do Poder Executivo Federal",
-            "1023" ~ "\u00d3rg\u00e3o P\u00fablico do Poder Executivo Estadual ou do Distrito Federal",
-            "1031" ~ "\u00d3rg\u00e3o P\u00fablico do Poder Executivo Municipal",
-            "1040" ~ "\u00d3rg\u00e3o P\u00fablico do Poder Legislativo Federal",
-            "1058" ~ "\u00d3rg\u00e3o P\u00fablico do Poder Legislativo Estadual ou do Distrito Federal",
-            "1066" ~ "\u00d3rg\u00e3o P\u00fablico do Poder Legislativo Municipal",
-            "1074" ~ "\u00d3rg\u00e3o P\u00fablico do Poder Judici\u00e1rio Federal",
-            "1082" ~ "\u00d3rg\u00e3o P\u00fablico do Poder Judici\u00e1rio Estadual",
+            "1023" ~
+              "\u00d3rg\u00e3o P\u00fablico do Poder Executivo Estadual ou do Distrito Federal",
+            "1031" ~
+              "\u00d3rg\u00e3o P\u00fablico do Poder Executivo Municipal",
+            "1040" ~
+              "\u00d3rg\u00e3o P\u00fablico do Poder Legislativo Federal",
+            "1058" ~
+              "\u00d3rg\u00e3o P\u00fablico do Poder Legislativo Estadual ou do Distrito Federal",
+            "1066" ~
+              "\u00d3rg\u00e3o P\u00fablico do Poder Legislativo Municipal",
+            "1074" ~
+              "\u00d3rg\u00e3o P\u00fablico do Poder Judici\u00e1rio Federal",
+            "1082" ~
+              "\u00d3rg\u00e3o P\u00fablico do Poder Judici\u00e1rio Estadual",
             "1104" ~ "Autarquia Federal",
             "1112" ~ "Autarquia Estadual ou do Distrito Federal",
             "1120" ~ "Autarquia Municipal",
-            "1139" ~ "Funda\u00e7\u00e3o P\u00fablica de Direito P\u00fablico Federal",
-            "1147" ~ "Funda\u00e7\u00e3o P\u00fablica de Direito P\u00fablico Estadual ou do Distrito Federal",
-            "1155" ~ "Funda\u00e7\u00e3o P\u00fablica de Direito P\u00fablico Municipal",
+            "1139" ~
+              "Funda\u00e7\u00e3o P\u00fablica de Direito P\u00fablico Federal",
+            "1147" ~
+              "Funda\u00e7\u00e3o P\u00fablica de Direito P\u00fablico Estadual ou do Distrito Federal",
+            "1155" ~
+              "Funda\u00e7\u00e3o P\u00fablica de Direito P\u00fablico Municipal",
             "1163" ~ "\u00d3rg\u00e3o P\u00fablico Aut\u00f4nomo Federal",
-            "1171" ~ "\u00d3rg\u00e3o P\u00fablico Aut\u00f4nomo Estadual ou do Distrito Federal",
+            "1171" ~
+              "\u00d3rg\u00e3o P\u00fablico Aut\u00f4nomo Estadual ou do Distrito Federal",
             "1180" ~ "\u00d3rg\u00e3o P\u00fablico Aut\u00f4nomo Municipal",
             "1198" ~ "Comiss\u00e3o Polinacional",
             "1201" ~ "Fundo P\u00fablico",
-            "1210" ~ "Cons\u00f3rcio P\u00fablico de Direito P\u00fablico (Associa\u00e7\u00e3o P\u00fablica)",
+            "1210" ~
+              "Cons\u00f3rcio P\u00fablico de Direito P\u00fablico (Associa\u00e7\u00e3o P\u00fablica)",
             "1228" ~ "Cons\u00f3rcio P\u00fablico de Direito Privado",
             "1236" ~ "Estado ou Distrito Federal",
             "1244" ~ "Munic\u00edpio",
-            "1252" ~ "Funda\u00e7\u00e3o P\u00fablica de Direito Privado Federal",
-            "1260" ~ "Funda\u00e7\u00e3o P\u00fablica de Direito Privado Estadual ou do Distrito Federal",
-            "1279" ~ "Funda\u00e7\u00e3o P\u00fablica de Direito Privado Municipal",
+            "1252" ~
+              "Funda\u00e7\u00e3o P\u00fablica de Direito Privado Federal",
+            "1260" ~
+              "Funda\u00e7\u00e3o P\u00fablica de Direito Privado Estadual ou do Distrito Federal",
+            "1279" ~
+              "Funda\u00e7\u00e3o P\u00fablica de Direito Privado Municipal",
             "2011" ~ "Empresa P\u00fablica",
             "2038" ~ "Sociedade de Economia Mista",
             "2046" ~ "Sociedade An\u00f4nima Aberta",
@@ -288,14 +312,16 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
             "2062" ~ "Sociedade Empres\u00e1ria Limitada",
             "2070" ~ "Sociedade Empres\u00e1ria em Nome Coletivo",
             "2089" ~ "Sociedade Empres\u00e1ria em Comandita Simples",
-            "2097" ~ "Sociedade Empres\u00e1ria em Comandita por A\u00e7\u00f5es",
+            "2097" ~
+              "Sociedade Empres\u00e1ria em Comandita por A\u00e7\u00f5es",
             "2127" ~ "Sociedade em Conta de Participa\u00e7\u00e3o",
             "2135" ~ "Empres\u00e1rio (Individual)",
             "2143" ~ "Cooperativa",
             "2151" ~ "Cons\u00f3rcio de Sociedades",
             "2160" ~ "Grupo de Sociedades",
             "2178" ~ "Estabelecimento, no Brasil, de Sociedade Estrangeira",
-            "2194" ~ "Estabelecimento, no Brasil, de Empresa Binacional Argentino-Brasileira",
+            "2194" ~
+              "Estabelecimento, no Brasil, de Empresa Binacional Argentino-Brasileira",
             "2216" ~ "Empresa Domiciliada no Exterior",
             "2224" ~ "Clube/Fundo de Investimento",
             "2232" ~ "Sociedade Simples Pura",
@@ -305,8 +331,10 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
             "2275" ~ "Empresa Binacional",
             "2283" ~ "Cons\u00f3rcio de Empregadores",
             "2291" ~ "Cons\u00f3rcio Simples",
-            "2305" ~ "Empresa Individual de Responsabilidade Limitada (de Natureza Empres\u00e1ria)",
-            "2313" ~ "Empresa Individual de Responsabilidade Limitada (de Natureza Simples)",
+            "2305" ~
+              "Empresa Individual de Responsabilidade Limitada (de Natureza Empres\u00e1ria)",
+            "2313" ~
+              "Empresa Individual de Responsabilidade Limitada (de Natureza Simples)",
             "2321" ~ "Sociedade Unipessoal de Advogados",
             "2330" ~ "Cooperativas de Consumo",
             "3034" ~ "Servi\u00e7o Notarial e Registral (Cart\u00f3rio)",
@@ -316,14 +344,19 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
             "3107" ~ "Comiss\u00e3o de Concilia\u00e7\u00e3o Pr\u00e9via",
             "3115" ~ "Entidade de Media\u00e7\u00e3o e Arbitragem",
             "3131" ~ "Entidade Sindical",
-            "3204" ~ "Estabelecimento, no Brasil, de Funda\u00e7\u00e3o ou Associa\u00e7\u00e3o Estrangeiras",
-            "3212" ~ "Funda\u00e7\u00e3o ou Associa\u00e7\u00e3o Domiciliada no Exterior",
+            "3204" ~
+              "Estabelecimento, no Brasil, de Funda\u00e7\u00e3o ou Associa\u00e7\u00e3o Estrangeiras",
+            "3212" ~
+              "Funda\u00e7\u00e3o ou Associa\u00e7\u00e3o Domiciliada no Exterior",
             "3220" ~ "Organiza\u00e7\u00e3o Religiosa",
             "3239" ~ "Comunidade Ind\u00edgena",
             "3247" ~ "Fundo Privado",
-            "3255" ~ "\u00d3rg\u00e3o de Dire\u00e7\u00e3o Nacional de Partido Pol\u00edtico",
-            "3263" ~ "\u00d3rg\u00e3o de Dire\u00e7\u00e3o Regional de Partido Pol\u00edtico",
-            "3271" ~ "\u00d3rg\u00e3o de Dire\u00e7\u00e3o Local de Partido Pol\u00edtico",
+            "3255" ~
+              "\u00d3rg\u00e3o de Dire\u00e7\u00e3o Nacional de Partido Pol\u00edtico",
+            "3263" ~
+              "\u00d3rg\u00e3o de Dire\u00e7\u00e3o Regional de Partido Pol\u00edtico",
+            "3271" ~
+              "\u00d3rg\u00e3o de Dire\u00e7\u00e3o Local de Partido Pol\u00edtico",
             "3280" ~ "Comit\u00ea Financeiro de Partido Pol\u00edtico",
             "3298" ~ "Frente Plebiscit\u00e1ria ou Referend\u00e1ria",
             "3306" ~ "Organiza\u00e7\u00e3o Social (OS)",
@@ -346,7 +379,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # CLIENTEL
-    if("CLIENTEL" %in% variables_names){
+    if ("CLIENTEL" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           CLIENTEL = dplyr::case_match(
@@ -363,7 +396,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # TP_UNID
-    if("TP_UNID" %in% variables_names){
+    if ("TP_UNID" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           TP_UNID = dplyr::case_match(
@@ -389,15 +422,18 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
             "36" ~ "Cl\u00ednica / Centro de sa\u00fade de especialidade",
             "39" ~ "Unidade de apoio diagnose e terapia (SADT isolado)",
             "40" ~ "Unidade m\u00f3vel terrestre",
-            "42" ~ "Unidade m\u00f3vel de n\u00edvel pr\u00e9-hospitalar na \u00e1rea de urg\u00eancia",
+            "42" ~
+              "Unidade m\u00f3vel de n\u00edvel pr\u00e9-hospitalar na \u00e1rea de urg\u00eancia",
             "43" ~ "Farm\u00e1cia",
             "45" ~ "Unidade de sa\u00fade da fam\u00edlia",
             "50" ~ "Unidade de vigil\u00e2ncia em sa\u00fade",
-            "60" ~ "Cooperativa ou empresa de cess\u00e3o de trabalhadores na sa\u00fade",
+            "60" ~
+              "Cooperativa ou empresa de cess\u00e3o de trabalhadores na sa\u00fade",
             "61" ~ "Centro de parto normal - isolado",
             "62" ~ "Hospital / Dia - Isolado",
             "63" ~ "Unidade autorizadora",
-            "64" ~ "Central de regula\u00e7\u00e3o de servi\u00e7os de sa\u00fade",
+            "64" ~
+              "Central de regula\u00e7\u00e3o de servi\u00e7os de sa\u00fade",
             "65" ~ "Unidade de vigil\u00e2ncia epidemiol\u00f3gica (antigo)",
             "66" ~ "Unidade de vigil\u00e2ncia sanit\u00e1ria (antigo)",
             "67" ~ "Laborat\u00f3rio central de sa\u00fade p\u00fablica LACEN",
@@ -409,14 +445,18 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
             "73" ~ "Pronto atendimento",
             "74" ~ "P\u00f3lo academia da sa\u00fade",
             "75" ~ "Telessa\u00fade",
-            "76" ~ "Central de regula\u00e7\u00e3o m\u00e9dica das urg\u00eancias",
-            "77" ~ "Servi\u00e7o de aten\u00e7\u00e3o domiciliar isolado (Home care)",
+            "76" ~
+              "Central de regula\u00e7\u00e3o m\u00e9dica das urg\u00eancias",
+            "77" ~
+              "Servi\u00e7o de aten\u00e7\u00e3o domiciliar isolado (Home care)",
             "78" ~ "Unidade de aten\u00e7\u00e3o em regime residencial",
             "79" ~ "Oficina ortop\u00e9dica",
             "80" ~ "Laborat\u00f3rio de sa\u00fade p\u00fablica",
             "81" ~ "Central de regula\u00e7\u00e3o do acesso",
-            "82" ~ "Central de notifica\u00e7\u00e3o, capta\u00e7\u00e3o e distribui\u00e7\u00e3o de \u00f3rg\u00e3os estadual",
-            "83" ~ "P\u00f3lo de preven\u00e7\u00e3o de doen\u00e7as e agravos e promo\u00e7\u00e3o da sa\u00fade",
+            "82" ~
+              "Central de notifica\u00e7\u00e3o, capta\u00e7\u00e3o e distribui\u00e7\u00e3o de \u00f3rg\u00e3os estadual",
+            "83" ~
+              "P\u00f3lo de preven\u00e7\u00e3o de doen\u00e7as e agravos e promo\u00e7\u00e3o da sa\u00fade",
             "84" ~ "Central de abastecimento",
             "85" ~ "Centro de imuniza\u00e7\u00e3o",
             .default = .data$TP_UNID
@@ -426,7 +466,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # TURNO_AT
-    if("TURNO_AT" %in% variables_names){
+    if ("TURNO_AT" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           TURNO_AT = dplyr::case_match(
@@ -446,7 +486,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # NIV_HIER
-    if("NIV_HIER" %in% variables_names){
+    if ("NIV_HIER" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           NIV_HIER = dplyr::case_match(
@@ -468,7 +508,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # TP_PREST
-    if("TP_PREST" %in% variables_names){
+    if ("TP_PREST" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           TP_PREST = dplyr::case_match(
@@ -489,61 +529,61 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # CO_BANCO
-    if("CO_BANCO" %in% variables_names){
+    if ("CO_BANCO" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(CO_BANCO = as.character(.data$CO_BANCO))
     }
 
     # CO_AGENC
-    if("CO_AGENC" %in% variables_names){
+    if ("CO_AGENC" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(CO_AGENC = as.character(.data$CO_AGENC))
     }
 
     # C_CORREN
-    if("C_CORREN" %in% variables_names){
+    if ("C_CORREN" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(C_CORREN = as.character(.data$C_CORREN))
     }
 
     # CONTRATM
-    if("CONTRATM" %in% variables_names){
+    if ("CONTRATM" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(CONTRATM = as.character(.data$CONTRATM))
     }
 
     # DT_PUBLM
-    if("DT_PUBLM" %in% variables_names){
+    if ("DT_PUBLM" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(DT_PUBLM = as.character(.data$DT_PUBLM))
     }
 
     # CONTRATE
-    if("CONTRATE" %in% variables_names){
+    if ("CONTRATE" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(CONTRATE = as.character(.data$CONTRATE))
     }
 
     # DT_PUBLE
-    if("DT_PUBLE" %in% variables_names){
+    if ("DT_PUBLE" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(DT_PUBLE = as.character(.data$DT_PUBLE))
     }
 
     # ALVARA
-    if("ALVARA" %in% variables_names){
+    if ("ALVARA" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(ALVARA = as.character(.data$ALVARA))
     }
 
     # DT_EXPED
-    if("DT_EXPED" %in% variables_names){
+    if ("DT_EXPED" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(DT_EXPED = as.character(.data$DT_EXPED))
     }
 
     # ORGEXPED
-    if("ORGEXPED" %in% variables_names){
+    if ("ORGEXPED" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           ORGEXPED = dplyr::case_match(
@@ -557,7 +597,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # AV_ACRED
-    if("AV_ACRED" %in% variables_names){
+    if ("AV_ACRED" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           AV_ACRED = dplyr::case_match(
@@ -572,7 +612,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # CLASAVAL
-    if("CLASAVAL" %in% variables_names){
+    if ("CLASAVAL" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           CLASAVAL = dplyr::case_match(
@@ -589,13 +629,13 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # DT_ACRED
-    if("DT_ACRED" %in% variables_names){
+    if ("DT_ACRED" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(DT_ACRED = as.integer(.data$DT_ACRED))
     }
 
     # AV_PNASS
-    if("AV_PNASS" %in% variables_names){
+    if ("AV_PNASS" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           AV_PNASS = dplyr::case_match(
@@ -610,21 +650,21 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # DT_PNASS
-    if("DT_PNASS" %in% variables_names){
+    if ("DT_PNASS" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(DT_PNASS = as.integer(.data$DT_PNASS))
     }
 
     # GESPRG1E
-    if("GESPRG1E" %in% variables_names){
+    if ("GESPRG1E" %in% variables_names) {
       data$GESPRG1E <- as.numeric(levels(data$GESPRG1E))[data$GESPRG1E]
-      data$GESPRG1E[data$GESPRG1E==1] <- "Sim"
-      data$GESPRG1E[data$GESPRG1E==0] <- "N\u00e3o"
+      data$GESPRG1E[data$GESPRG1E == 1] <- "Sim"
+      data$GESPRG1E[data$GESPRG1E == 0] <- "N\u00e3o"
       data$GESPRG1E <- factor(data$GESPRG1E)
     }
 
     # GESPRG1M
-    if("GESPRG1M" %in% variables_names){
+    if ("GESPRG1M" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           GESPRG1M = dplyr::case_match(
@@ -639,7 +679,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # GESPRG2E
-    if("GESPRG2E" %in% variables_names){
+    if ("GESPRG2E" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           GESPRG2E = dplyr::case_match(
@@ -654,7 +694,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # GESPRG2M
-    if("GESPRG2M" %in% variables_names){
+    if ("GESPRG2M" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           GESPRG2M = dplyr::case_match(
@@ -669,7 +709,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # GESPRG4E
-    if("GESPRG4E" %in% variables_names){
+    if ("GESPRG4E" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           GESPRG4E = dplyr::case_match(
@@ -684,7 +724,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # GESPRG4M
-    if("GESPRG4M" %in% variables_names){
+    if ("GESPRG4M" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           GESPRG4M = dplyr::case_match(
@@ -699,7 +739,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # NIVATE_A
-    if("NIVATE_A" %in% variables_names){
+    if ("NIVATE_A" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           NIVATE_A = dplyr::case_match(
@@ -714,7 +754,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # GESPRG3E
-    if("GESPRG3E" %in% variables_names){
+    if ("GESPRG3E" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           GESPRG3E = dplyr::case_match(
@@ -729,7 +769,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # GESPRG3M
-    if("GESPRG3M" %in% variables_names){
+    if ("GESPRG3M" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           GESPRG3M = dplyr::case_match(
@@ -744,7 +784,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # GESPRG5E
-    if("GESPRG5E" %in% variables_names){
+    if ("GESPRG5E" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           GESPRG5E = dplyr::case_match(
@@ -759,7 +799,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # GESPRG5M
-    if("GESPRG5M" %in% variables_names){
+    if ("GESPRG5M" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           GESPRG5M = dplyr::case_match(
@@ -774,7 +814,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # GESPRG6E
-    if("GESPRG6E" %in% variables_names){
+    if ("GESPRG6E" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           GESPRG6E = dplyr::case_match(
@@ -789,7 +829,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # GESPRG6M
-    if("GESPRG6M" %in% variables_names){
+    if ("GESPRG6M" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           GESPRG6M = dplyr::case_match(
@@ -804,7 +844,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # NIVATE_H
-    if("NIVATE_H" %in% variables_names){
+    if ("NIVATE_H" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           NIVATE_H = dplyr::case_match(
@@ -819,7 +859,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # URGEMERG
-    if("URGEMERG" %in% variables_names){
+    if ("URGEMERG" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           URGEMERG = dplyr::case_match(
@@ -834,7 +874,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # ATENDAMB
-    if("ATENDAMB" %in% variables_names){
+    if ("ATENDAMB" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           ATENDAMB = dplyr::case_match(
@@ -849,7 +889,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # CENTROBS
-    if("CENTROBS" %in% variables_names){
+    if ("CENTROBS" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           CENTROBS = dplyr::case_match(
@@ -864,7 +904,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # CENTRNEO
-    if("CENTRNEO" %in% variables_names){
+    if ("CENTRNEO" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           CENTRNEO = dplyr::case_match(
@@ -879,7 +919,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # ATENDHOS
-    if("ATENDHOS" %in% variables_names){
+    if ("ATENDHOS" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           ATENDHOS = dplyr::case_match(
@@ -894,7 +934,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # SERAP01P
-    if("SERAP01P" %in% variables_names){
+    if ("SERAP01P" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           SERAP01P = dplyr::case_match(
@@ -909,7 +949,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # SERAP01T
-    if("SERAP01T" %in% variables_names){
+    if ("SERAP01T" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           SERAP01T = dplyr::case_match(
@@ -924,7 +964,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # SERAP02P
-    if("SERAP02P" %in% variables_names){
+    if ("SERAP02P" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           SERAP02P = dplyr::case_match(
@@ -939,7 +979,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # SERAP02T
-    if("SERAP02T" %in% variables_names){
+    if ("SERAP02T" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           SERAP02T = dplyr::case_match(
@@ -954,7 +994,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # SERAP03P
-    if("SERAP03P" %in% variables_names){
+    if ("SERAP03P" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           SERAP03P = dplyr::case_match(
@@ -969,7 +1009,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # SERAP03T
-    if("SERAP03T" %in% variables_names){
+    if ("SERAP03T" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           SERAP03T = dplyr::case_match(
@@ -984,7 +1024,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # SERAP04P
-    if("SERAP04P" %in% variables_names){
+    if ("SERAP04P" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           SERAP04P = dplyr::case_match(
@@ -999,7 +1039,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # SERAP04T
-    if("SERAP04T" %in% variables_names){
+    if ("SERAP04T" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           SERAP04T = dplyr::case_match(
@@ -1014,7 +1054,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # SERAP05P
-    if("SERAP05P" %in% variables_names){
+    if ("SERAP05P" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           SERAP05P = dplyr::case_match(
@@ -1029,7 +1069,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # SERAP05T
-    if("SERAP05T" %in% variables_names){
+    if ("SERAP05T" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           SERAP05T = dplyr::case_match(
@@ -1044,7 +1084,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # SERAP06P
-    if("SERAP06P" %in% variables_names){
+    if ("SERAP06P" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           SERAP06P = dplyr::case_match(
@@ -1059,7 +1099,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # SERAP06T
-    if("SERAP06T" %in% variables_names){
+    if ("SERAP06T" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           SERAP06T = dplyr::case_match(
@@ -1074,7 +1114,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # SERAP07P
-    if("SERAP07P" %in% variables_names){
+    if ("SERAP07P" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           SERAP07P = dplyr::case_match(
@@ -1089,7 +1129,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # SERAP07T
-    if("SERAP07T" %in% variables_names){
+    if ("SERAP07T" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           SERAP07T = dplyr::case_match(
@@ -1104,7 +1144,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # SERAP08P
-    if("SERAP08P" %in% variables_names){
+    if ("SERAP08P" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           SERAP08P = dplyr::case_match(
@@ -1119,7 +1159,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # SERAP08T
-    if("SERAP08T" %in% variables_names){
+    if ("SERAP08T" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           SERAP08T = dplyr::case_match(
@@ -1134,7 +1174,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # SERAP09P
-    if("SERAP09P" %in% variables_names){
+    if ("SERAP09P" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           SERAP09P = dplyr::case_match(
@@ -1149,7 +1189,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # SERAP09T
-    if("SERAP09T" %in% variables_names){
+    if ("SERAP09T" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           SERAP09T = dplyr::case_match(
@@ -1164,7 +1204,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # SERAP10P
-    if("SERAP10P" %in% variables_names){
+    if ("SERAP10P" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           SERAP10P = dplyr::case_match(
@@ -1179,7 +1219,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # SERAP10T
-    if("SERAP10T" %in% variables_names){
+    if ("SERAP10T" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           SERAP10T = dplyr::case_match(
@@ -1194,7 +1234,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # SERAP11P
-    if("SERAP11P" %in% variables_names){
+    if ("SERAP11P" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           SERAP11P = dplyr::case_match(
@@ -1209,7 +1249,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # SERAP11T
-    if("SERAP11T" %in% variables_names){
+    if ("SERAP11T" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           SERAP11T = dplyr::case_match(
@@ -1224,7 +1264,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # SERAPOIO
-    if("SERAPOIO" %in% variables_names){
+    if ("SERAPOIO" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           SERAPOIO = dplyr::case_match(
@@ -1239,7 +1279,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # RES_BIOL
-    if("RES_BIOL" %in% variables_names){
+    if ("RES_BIOL" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           RES_BIOL = dplyr::case_match(
@@ -1254,7 +1294,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # RES_QUIM
-    if("RES_QUIM" %in% variables_names){
+    if ("RES_QUIM" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           RES_QUIM = dplyr::case_match(
@@ -1269,7 +1309,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # RES_RADI
-    if("RES_RADI" %in% variables_names){
+    if ("RES_RADI" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           RES_RADI = dplyr::case_match(
@@ -1284,7 +1324,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # RES_COMU
-    if("RES_COMU" %in% variables_names){
+    if ("RES_COMU" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           RES_COMU = dplyr::case_match(
@@ -1299,7 +1339,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # COLETRES
-    if("COLETRES" %in% variables_names){
+    if ("COLETRES" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           COLETRES = dplyr::case_match(
@@ -1314,7 +1354,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # COMISS01
-    if("COMISS01" %in% variables_names){
+    if ("COMISS01" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           COMISS01 = dplyr::case_match(
@@ -1329,7 +1369,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # COMISS02
-    if("COMISS02" %in% variables_names){
+    if ("COMISS02" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           COMISS02 = dplyr::case_match(
@@ -1344,7 +1384,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # COMISS03
-    if("COMISS03" %in% variables_names){
+    if ("COMISS03" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           COMISS03 = dplyr::case_match(
@@ -1359,7 +1399,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # COMISS04
-    if("COMISS04" %in% variables_names){
+    if ("COMISS04" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           COMISS04 = dplyr::case_match(
@@ -1374,7 +1414,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # COMISS05
-    if("COMISS05" %in% variables_names){
+    if ("COMISS05" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           COMISS05 = dplyr::case_match(
@@ -1389,7 +1429,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # COMISS06
-    if("COMISS06" %in% variables_names){
+    if ("COMISS06" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           COMISS06 = dplyr::case_match(
@@ -1404,7 +1444,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # COMISS07
-    if("COMISS07" %in% variables_names){
+    if ("COMISS07" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           COMISS07 = dplyr::case_match(
@@ -1419,7 +1459,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # COMISS08
-    if("COMISS08" %in% variables_names){
+    if ("COMISS08" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           COMISS08 = dplyr::case_match(
@@ -1434,7 +1474,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # COMISS09
-    if("COMISS09" %in% variables_names){
+    if ("COMISS09" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           COMISS09 = dplyr::case_match(
@@ -1449,7 +1489,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # COMISS10
-    if("COMISS10" %in% variables_names){
+    if ("COMISS10" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           COMISS10 = dplyr::case_match(
@@ -1464,7 +1504,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # COMISS11
-    if("COMISS11" %in% variables_names){
+    if ("COMISS11" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           COMISS11 = dplyr::case_match(
@@ -1479,7 +1519,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # COMISS12
-    if("COMISS12" %in% variables_names){
+    if ("COMISS12" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           COMISS12 = dplyr::case_match(
@@ -1494,7 +1534,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # COMISSAO
-    if("COMISSAO" %in% variables_names){
+    if ("COMISSAO" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           COMISSAO = dplyr::case_match(
@@ -1509,7 +1549,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # AP01CV01
-    if("AP01CV01" %in% variables_names){
+    if ("AP01CV01" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           AP01CV01 = dplyr::case_match(
@@ -1524,7 +1564,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # AP01CV02
-    if("AP01CV02" %in% variables_names){
+    if ("AP01CV02" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           AP01CV02 = dplyr::case_match(
@@ -1539,7 +1579,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # AP01CV05
-    if("AP01CV05" %in% variables_names){
+    if ("AP01CV05" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           AP01CV05 = dplyr::case_match(
@@ -1554,7 +1594,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # AP01CV06
-    if("AP01CV06" %in% variables_names){
+    if ("AP01CV06" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           AP01CV06 = dplyr::case_match(
@@ -1569,7 +1609,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # AP01CV03
-    if("AP01CV03" %in% variables_names){
+    if ("AP01CV03" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           AP01CV03 = dplyr::case_match(
@@ -1584,7 +1624,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # AP01CV04
-    if("AP01CV04" %in% variables_names){
+    if ("AP01CV04" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           AP01CV04 = dplyr::case_match(
@@ -1599,7 +1639,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # AP02CV01
-    if("AP02CV01" %in% variables_names){
+    if ("AP02CV01" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           AP02CV01 = dplyr::case_match(
@@ -1614,7 +1654,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # AP02CV02
-    if("AP02CV02" %in% variables_names){
+    if ("AP02CV02" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           AP02CV02 = dplyr::case_match(
@@ -1629,7 +1669,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # AP02CV05
-    if("AP02CV05" %in% variables_names){
+    if ("AP02CV05" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           AP02CV05 = dplyr::case_match(
@@ -1644,7 +1684,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # AP02CV06
-    if("AP02CV06" %in% variables_names){
+    if ("AP02CV06" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           AP02CV06 = dplyr::case_match(
@@ -1659,7 +1699,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # AP02CV03
-    if("AP02CV03" %in% variables_names){
+    if ("AP02CV03" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           AP02CV03 = dplyr::case_match(
@@ -1674,7 +1714,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # AP02CV04
-    if("AP02CV04" %in% variables_names){
+    if ("AP02CV04" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           AP02CV04 = dplyr::case_match(
@@ -1689,7 +1729,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # AP03CV01
-    if("AP03CV01" %in% variables_names){
+    if ("AP03CV01" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           AP03CV01 = dplyr::case_match(
@@ -1704,7 +1744,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # AP03CV02
-    if("AP03CV02" %in% variables_names){
+    if ("AP03CV02" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           AP03CV02 = dplyr::case_match(
@@ -1719,7 +1759,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # AP03CV05
-    if("AP03CV05" %in% variables_names){
+    if ("AP03CV05" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           AP03CV05 = dplyr::case_match(
@@ -1734,7 +1774,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # AP03CV06
-    if("AP03CV06" %in% variables_names){
+    if ("AP03CV06" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           AP03CV06 = dplyr::case_match(
@@ -1749,7 +1789,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # AP03CV03
-    if("AP03CV03" %in% variables_names){
+    if ("AP03CV03" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           AP03CV03 = dplyr::case_match(
@@ -1764,7 +1804,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # AP03CV04
-    if("AP03CV04" %in% variables_names){
+    if ("AP03CV04" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           AP03CV04 = dplyr::case_match(
@@ -1779,7 +1819,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # AP04CV01
-    if("AP04CV01" %in% variables_names){
+    if ("AP04CV01" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           AP04CV01 = dplyr::case_match(
@@ -1794,7 +1834,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # AP04CV02
-    if("AP04CV02" %in% variables_names){
+    if ("AP04CV02" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           AP04CV02 = dplyr::case_match(
@@ -1809,7 +1849,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # AP04CV05
-    if("AP04CV05" %in% variables_names){
+    if ("AP04CV05" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           AP04CV05 = dplyr::case_match(
@@ -1824,7 +1864,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # AP04CV06
-    if("AP04CV06" %in% variables_names){
+    if ("AP04CV06" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           AP04CV06 = dplyr::case_match(
@@ -1839,7 +1879,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # AP04CV03
-    if("AP04CV03" %in% variables_names){
+    if ("AP04CV03" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           AP04CV03 = dplyr::case_match(
@@ -1854,7 +1894,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # AP04CV04
-    if("AP04CV04" %in% variables_names){
+    if ("AP04CV04" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           AP04CV04 = dplyr::case_match(
@@ -1869,7 +1909,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # AP05CV01
-    if("AP05CV01" %in% variables_names){
+    if ("AP05CV01" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           AP05CV01 = dplyr::case_match(
@@ -1884,7 +1924,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # AP05CV02
-    if("AP05CV02" %in% variables_names){
+    if ("AP05CV02" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           AP05CV02 = dplyr::case_match(
@@ -1899,7 +1939,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # AP05CV05
-    if("AP05CV05" %in% variables_names){
+    if ("AP05CV05" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           AP05CV05 = dplyr::case_match(
@@ -1914,7 +1954,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # AP05CV06
-    if("AP05CV06" %in% variables_names){
+    if ("AP05CV06" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           AP05CV06 = dplyr::case_match(
@@ -1929,7 +1969,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # AP05CV03
-    if("AP05CV03" %in% variables_names){
+    if ("AP05CV03" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           AP05CV03 = dplyr::case_match(
@@ -1944,7 +1984,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # AP05CV04
-    if("AP05CV04" %in% variables_names){
+    if ("AP05CV04" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           AP05CV04 = dplyr::case_match(
@@ -1959,7 +1999,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # AP06CV01
-    if("AP06CV01" %in% variables_names){
+    if ("AP06CV01" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           AP06CV01 = dplyr::case_match(
@@ -1974,7 +2014,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # AP06CV02
-    if("AP06CV02" %in% variables_names){
+    if ("AP06CV02" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           AP06CV02 = dplyr::case_match(
@@ -1989,7 +2029,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # AP06CV05
-    if("AP06CV05" %in% variables_names){
+    if ("AP06CV05" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           AP06CV05 = dplyr::case_match(
@@ -2004,7 +2044,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # AP06CV06
-    if("AP06CV06" %in% variables_names){
+    if ("AP06CV06" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           AP06CV06 = dplyr::case_match(
@@ -2019,7 +2059,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # AP06CV03
-    if("AP06CV03" %in% variables_names){
+    if ("AP06CV03" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           AP06CV03 = dplyr::case_match(
@@ -2034,7 +2074,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # AP06CV04
-    if("AP06CV04" %in% variables_names){
+    if ("AP06CV04" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           AP06CV04 = dplyr::case_match(
@@ -2049,7 +2089,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # AP07CV01
-    if("AP07CV01" %in% variables_names){
+    if ("AP07CV01" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           AP07CV01 = dplyr::case_match(
@@ -2064,7 +2104,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # AP07CV02
-    if("AP07CV02" %in% variables_names){
+    if ("AP07CV02" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           AP07CV02 = dplyr::case_match(
@@ -2079,7 +2119,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # AP07CV05
-    if("AP07CV05" %in% variables_names){
+    if ("AP07CV05" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           AP07CV05 = dplyr::case_match(
@@ -2094,7 +2134,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # AP07CV06
-    if("AP07CV06" %in% variables_names){
+    if ("AP07CV06" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           AP07CV06 = dplyr::case_match(
@@ -2109,7 +2149,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # AP07CV03
-    if("AP07CV03" %in% variables_names){
+    if ("AP07CV03" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           AP07CV03 = dplyr::case_match(
@@ -2124,7 +2164,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # AP07CV04
-    if("AP07CV04" %in% variables_names){
+    if ("AP07CV04" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           AP07CV04 = dplyr::case_match(
@@ -2139,7 +2179,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # ATEND_PR
-    if("ATEND_PR" %in% variables_names){
+    if ("ATEND_PR" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           ATEND_PR = dplyr::case_match(
@@ -2152,9 +2192,9 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
         ) %>%
         dplyr::mutate(ATEND_PR = as.factor(.data$ATEND_PR))
     }
-  } else if(information_system == "CNES-PF"){
+  } else if (information_system == "CNES-PF") {
     # CNES
-    if("CNES" %in% variables_names){
+    if ("CNES" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(CNES = as.character(.data$CNES))
     }
@@ -2169,31 +2209,31 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # REGSAUDE
-    if("REGSAUDE" %in% variables_names){
+    if ("REGSAUDE" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(REGSAUDE = as.character(.data$REGSAUDE))
     }
 
     # MICR_REG
-    if("MICR_REG" %in% variables_names){
+    if ("MICR_REG" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(MICR_REG = as.integer(.data$MICR_REG))
     }
 
     # DISTRSAN
-    if("DISTRSAN" %in% variables_names){
+    if ("DISTRSAN" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(DISTRSAN = as.integer(.data$DISTRSAN))
     }
 
     # DISTRADM
-    if("DISTRADM" %in% variables_names){
+    if ("DISTRADM" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(DISTRADM = as.integer(.data$DISTRADM))
     }
 
     # TPGESTAO
-    if("TPGESTAO" %in% variables_names){
+    if ("TPGESTAO" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           TPGESTAO = dplyr::case_match(
@@ -2210,7 +2250,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # PF_PJ
-    if("PF_PJ" %in% variables_names){
+    if ("PF_PJ" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           PF_PJ = dplyr::case_match(
@@ -2224,13 +2264,13 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # CPF_CNPJ
-    if("CPF_CNPJ" %in% variables_names){
+    if ("CPF_CNPJ" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(CPF_CNPJ = as.numeric(.data$CPF_CNPJ))
     }
 
     # NIV_DEP
-    if("NIV_DEP" %in% variables_names){
+    if ("NIV_DEP" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           NIV_DEP = dplyr::case_match(
@@ -2244,13 +2284,13 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # CNPJ_MAN
-    if("CNPJ_MAN" %in% variables_names){
+    if ("CNPJ_MAN" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(CNPJ_MAN = as.numeric(.data$CNPJ_MAN))
     }
 
     # ESFERA_A
-    if("ESFERA_A" %in% variables_names){
+    if ("ESFERA_A" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           ESFERA_A = dplyr::case_match(
@@ -2267,7 +2307,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # ATIVIDAD
-    if("ATIVIDAD" %in% variables_names){
+    if ("ATIVIDAD" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           ATIVIDAD = dplyr::case_match(
@@ -2285,7 +2325,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # RETENCAO
-    if("RETENCAO" %in% variables_names){
+    if ("RETENCAO" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           RETENCAO = dplyr::case_match(
@@ -2305,13 +2345,14 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # NATUREZA
-    if("NATUREZA" %in% variables_names){
+    if ("NATUREZA" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           NATUREZA = dplyr::case_match(
             .data$NATUREZA,
             "-99" ~ NA,
-            "1" ~ "Administra\u00e7\u00e3o Direta da Sa\u00fade (MS, SES, e SMS)",
+            "1" ~
+              "Administra\u00e7\u00e3o Direta da Sa\u00fade (MS, SES, e SMS)",
             "2" ~ "Adm Direta outros org\u00e3os (MEX, MEx, Marinha,...)",
             "3" ~ "Adm Indireta - Autarquias",
             "4" ~ "Adm Indireta - Funda\u00e7\u00e3o P\u00fablica",
@@ -2332,7 +2373,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # CLIENTEL
-    if("CLIENTEL" %in% variables_names){
+    if ("CLIENTEL" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           CLIENTEL = dplyr::case_match(
@@ -2349,7 +2390,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # TP_UNID
-    if("TP_UNID" %in% variables_names){
+    if ("TP_UNID" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           TP_UNID = dplyr::case_match(
@@ -2369,15 +2410,18 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
             "36" ~ "Cl\u00ednica / Centro de sa\u00fade de especialidade",
             "39" ~ "Unidade de apoio diagnose e terapia (SADT isolado)",
             "40" ~ "Unidade m\u00f3vel terrestre",
-            "42" ~ "Unidade m\u00f3vel de n\u00edvel pr\u00e9-hospitalar na \u00e1rea de urg\u00eancia",
+            "42" ~
+              "Unidade m\u00f3vel de n\u00edvel pr\u00e9-hospitalar na \u00e1rea de urg\u00eancia",
             "43" ~ "Farm\u00e1cia",
             "45" ~ "Unidade de sa\u00fade da fam\u00edlia",
             "50" ~ "Unidade de vigil\u00e2ncia em sa\u00fade",
-            "60" ~ "Cooperativa ou empresa de cess\u00e3o de trabalhadores na sa\u00fade",
+            "60" ~
+              "Cooperativa ou empresa de cess\u00e3o de trabalhadores na sa\u00fade",
             "61" ~ "Centro de parto normal - isolado",
             "62" ~ "Hospital / Dia - Isolado",
             "63" ~ "Unidade autorizadora",
-            "64" ~ "Central de regula\u00e7\u00e3o de servi\u00e7os de sa\u00fade",
+            "64" ~
+              "Central de regula\u00e7\u00e3o de servi\u00e7os de sa\u00fade",
             "65" ~ "Unidade de vigil\u00e2ncia epidemiol\u00f3gica (antigo)",
             "66" ~ "Unidade de vigil\u00e2ncia sanit\u00e1ria (antigo)",
             "67" ~ "Laborat\u00f3rio central de sa\u00fade p\u00fablica LACEN",
@@ -2389,14 +2433,18 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
             "73" ~ "Pronto atendimento",
             "74" ~ "P\u00f3lo academia da sa\u00fade",
             "75" ~ "Telessa\u00fade",
-            "76" ~ "Central de regula\u00e7\u00e3o m\u00e9dica das urg\u00eancias",
-            "77" ~ "Servi\u00e7o de aten\u00e7\u00e3o domiciliar isolado (Home care)",
+            "76" ~
+              "Central de regula\u00e7\u00e3o m\u00e9dica das urg\u00eancias",
+            "77" ~
+              "Servi\u00e7o de aten\u00e7\u00e3o domiciliar isolado (Home care)",
             "78" ~ "Unidade de aten\u00e7\u00e3o em regime residencial",
             "79" ~ "Oficina ortop\u00e9dica",
             "80" ~ "Laborat\u00f3rio de sa\u00fade p\u00fablica",
             "81" ~ "Central de regula\u00e7\u00e3o do acesso",
-            "82" ~ "Central de notifica\u00e7\u00e3o, capta\u00e7\u00e3o e distribui\u00e7\u00e3o de \u00f3rg\u00e3os estadual",
-            "83" ~ "P\u00f3lo de preven\u00e7\u00e3o de doen\u00e7as e agravos e promo\u00e7\u00e3o da sa\u00fade",
+            "82" ~
+              "Central de notifica\u00e7\u00e3o, capta\u00e7\u00e3o e distribui\u00e7\u00e3o de \u00f3rg\u00e3os estadual",
+            "83" ~
+              "P\u00f3lo de preven\u00e7\u00e3o de doen\u00e7as e agravos e promo\u00e7\u00e3o da sa\u00fade",
             .default = .data$TP_UNID
           )
         ) %>%
@@ -2404,7 +2452,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # TURNO_AT
-    if("TURNO_AT" %in% variables_names){
+    if ("TURNO_AT" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           TURNO_AT = dplyr::case_match(
@@ -2424,7 +2472,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # NIV_HIER
-    if("NIV_HIER" %in% variables_names){
+    if ("NIV_HIER" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           NIV_HIER = dplyr::case_match(
@@ -2432,14 +2480,14 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
             "-99" ~ NA,
             "99" ~ NA,
             "0" ~ NA,
-            "1"~ "PAB-PABA",
-            "2"~ "M\u00e9dia M1",
-            "3"~ "M\u00e9dia M2 e M3",
-            "4"~ "Alta complexidade ambulatorial",
-            "5"~ "Baixa M1 e M2",
-            "6"~ "M\u00e9dia M2 e M3",
-            "7"~ "M\u00e9dia M3",
-            "8"~ "Alta complexidade hospitalar / ambulatorial",
+            "1" ~ "PAB-PABA",
+            "2" ~ "M\u00e9dia M1",
+            "3" ~ "M\u00e9dia M2 e M3",
+            "4" ~ "Alta complexidade ambulatorial",
+            "5" ~ "Baixa M1 e M2",
+            "6" ~ "M\u00e9dia M2 e M3",
+            "7" ~ "M\u00e9dia M3",
+            "8" ~ "Alta complexidade hospitalar / ambulatorial",
             .default = .data$NIV_HIER
           )
         ) %>%
@@ -2447,7 +2495,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # TERCEIRO
-    if("TERCEIRO" %in% variables_names){
+    if ("TERCEIRO" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           TERCEIRO = dplyr::case_match(
@@ -2462,7 +2510,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # CPF_PROF
-    if("CPF_PROF" %in% variables_names){
+    if ("CPF_PROF" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           CPF_PROF = dplyr::case_match(
@@ -2483,13 +2531,13 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # NOMEPROF
-    if("NOMEPROF" %in% variables_names){
+    if ("NOMEPROF" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(NOMEPROF = as.character(.data$NOMEPROF))
     }
 
     # VINCULAC
-    if("VINCULAC" %in% variables_names){
+    if ("VINCULAC" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           VINCULAC = dplyr::case_match(
@@ -2504,7 +2552,7 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
     }
 
     # NAT_JUR
-    if("NAT_JUR" %in% variables_names){
+    if ("NAT_JUR" %in% variables_names) {
       data <- data %>%
         dplyr::mutate(
           NAT_JUR = dplyr::case_match(
@@ -2512,31 +2560,46 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
             "0" ~ NA,
             "1000" ~ "Administra\u00e7\u00e3o P\u00fablica",
             "1015" ~ "\u00d3rg\u00e3o P\u00fablico do Poder Executivo Federal",
-            "1023" ~ "\u00d3rg\u00e3o P\u00fablico do Poder Executivo Estadual ou do Distrito Federal",
-            "1031" ~ "\u00d3rg\u00e3o P\u00fablico do Poder Executivo Municipal",
-            "1040" ~ "\u00d3rg\u00e3o P\u00fablico do Poder Legislativo Federal",
-            "1058" ~ "\u00d3rg\u00e3o P\u00fablico do Poder Legislativo Estadual ou do Distrito Federal",
-            "1066" ~ "\u00d3rg\u00e3o P\u00fablico do Poder Legislativo Municipal",
-            "1074" ~ "\u00d3rg\u00e3o P\u00fablico do Poder Judici\u00e1rio Federal",
-            "1082" ~ "\u00d3rg\u00e3o P\u00fablico do Poder Judici\u00e1rio Estadual",
+            "1023" ~
+              "\u00d3rg\u00e3o P\u00fablico do Poder Executivo Estadual ou do Distrito Federal",
+            "1031" ~
+              "\u00d3rg\u00e3o P\u00fablico do Poder Executivo Municipal",
+            "1040" ~
+              "\u00d3rg\u00e3o P\u00fablico do Poder Legislativo Federal",
+            "1058" ~
+              "\u00d3rg\u00e3o P\u00fablico do Poder Legislativo Estadual ou do Distrito Federal",
+            "1066" ~
+              "\u00d3rg\u00e3o P\u00fablico do Poder Legislativo Municipal",
+            "1074" ~
+              "\u00d3rg\u00e3o P\u00fablico do Poder Judici\u00e1rio Federal",
+            "1082" ~
+              "\u00d3rg\u00e3o P\u00fablico do Poder Judici\u00e1rio Estadual",
             "1104" ~ "Autarquia Federal",
             "1112" ~ "Autarquia Estadual ou do Distrito Federal",
             "1120" ~ "Autarquia Municipal",
-            "1139" ~ "Funda\u00e7\u00e3o P\u00fablica de Direito P\u00fablico Federal",
-            "1147" ~ "Funda\u00e7\u00e3o P\u00fablica de Direito P\u00fablico Estadual ou do Distrito Federal",
-            "1155" ~ "Funda\u00e7\u00e3o P\u00fablica de Direito P\u00fablico Municipal",
+            "1139" ~
+              "Funda\u00e7\u00e3o P\u00fablica de Direito P\u00fablico Federal",
+            "1147" ~
+              "Funda\u00e7\u00e3o P\u00fablica de Direito P\u00fablico Estadual ou do Distrito Federal",
+            "1155" ~
+              "Funda\u00e7\u00e3o P\u00fablica de Direito P\u00fablico Municipal",
             "1163" ~ "\u00d3rg\u00e3o P\u00fablico Aut\u00f4nomo Federal",
-            "1171" ~ "\u00d3rg\u00e3o P\u00fablico Aut\u00f4nomo Estadual ou do Distrito Federal",
+            "1171" ~
+              "\u00d3rg\u00e3o P\u00fablico Aut\u00f4nomo Estadual ou do Distrito Federal",
             "1180" ~ "\u00d3rg\u00e3o P\u00fablico Aut\u00f4nomo Municipal",
             "1198" ~ "Comiss\u00e3o Polinacional",
             "1201" ~ "Fundo P\u00fablico",
-            "1210" ~ "Cons\u00f3rcio P\u00fablico de Direito P\u00fablico (Associa\u00e7\u00e3o P\u00fablica)",
+            "1210" ~
+              "Cons\u00f3rcio P\u00fablico de Direito P\u00fablico (Associa\u00e7\u00e3o P\u00fablica)",
             "1228" ~ "Cons\u00f3rcio P\u00fablico de Direito Privado",
             "1236" ~ "Estado ou Distrito Federal",
             "1244" ~ "Munic\u00edpio",
-            "1252" ~ "Funda\u00e7\u00e3o P\u00fablica de Direito Privado Federal",
-            "1260" ~ "Funda\u00e7\u00e3o P\u00fablica de Direito Privado Estadual ou do Distrito Federal",
-            "1279" ~ "Funda\u00e7\u00e3o P\u00fablica de Direito Privado Municipal",
+            "1252" ~
+              "Funda\u00e7\u00e3o P\u00fablica de Direito Privado Federal",
+            "1260" ~
+              "Funda\u00e7\u00e3o P\u00fablica de Direito Privado Estadual ou do Distrito Federal",
+            "1279" ~
+              "Funda\u00e7\u00e3o P\u00fablica de Direito Privado Municipal",
             "2000" ~ "Entidades Empresariais",
             "2001" ~ "Empresa P\u00fablica",
             "2038" ~ "Sociedade de Economia Mista",
@@ -2545,14 +2608,16 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
             "2062" ~ "Sociedade Empres\u00e1ria Limitada",
             "2070" ~ "Sociedade Empres\u00e1ria em Nome Coletivo",
             "2089" ~ "Sociedade Empres\u00e1ria em Comandita Simples",
-            "2097" ~ "Sociedade Empres\u00e1ria em Comandita por A\u00e7\u00f5es",
+            "2097" ~
+              "Sociedade Empres\u00e1ria em Comandita por A\u00e7\u00f5es",
             "2127" ~ "Sociedade em Conta de Participa\u00e7\u00e3o",
             "2135" ~ "Empres\u00e1rio (Individual)",
             "2143" ~ "Cooperativa",
             "2151" ~ "Cons\u00f3rcio de Sociedades",
             "2160" ~ "Grupo de Sociedades",
             "2178" ~ "Estabelecimento, no Brasil, de Sociedade Estrangeira",
-            "2194" ~ "Estabelecimento, no Brasil, de Empresa Binacional Argentino-Brasileira",
+            "2194" ~
+              "Estabelecimento, no Brasil, de Empresa Binacional Argentino-Brasileira",
             "2216" ~ "Empresa Domiciliada no Exterior",
             "2224" ~ "Clube/Fundo de Investimento",
             "2232" ~ "Sociedade Simples Pura",
@@ -2562,8 +2627,10 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
             "2275" ~ "Empresa Binacional",
             "2283" ~ "Cons\u00f3rcio de Empregadores",
             "2291" ~ "Cons\u00f3rcio Simples",
-            "2305" ~ "Empresa Individual de Responsabilidade Limitada (de Natureza Empres\u00e1ria)",
-            "2313" ~ "Empresa Individual de Responsabilidade Limitada (de Natureza Simples)",
+            "2305" ~
+              "Empresa Individual de Responsabilidade Limitada (de Natureza Empres\u00e1ria)",
+            "2313" ~
+              "Empresa Individual de Responsabilidade Limitada (de Natureza Simples)",
             "2321" ~ "Sociedade Unipessoal de Advogados",
             "2330" ~ "Cooperativas de Consumo",
             "3000" ~ "Entidades sem Fins Lucrativos",
@@ -2574,14 +2641,19 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
             "3107" ~ "Comiss\u00e3o de Concilia\u00e7\u00e3o Pr\u00e9via",
             "3115" ~ "Entidade de Media\u00e7\u00e3o e Arbitragem",
             "3131" ~ "Entidade Sindical",
-            "3204" ~ "Estabelecimento, no Brasil, de Funda\u00e7\u00e3o ou Associa\u00e7\u00e3o Estrangeiras",
-            "3212" ~ "Funda\u00e7\u00e3o ou Associa\u00e7\u00e3o Domiciliada no Exterior",
+            "3204" ~
+              "Estabelecimento, no Brasil, de Funda\u00e7\u00e3o ou Associa\u00e7\u00e3o Estrangeiras",
+            "3212" ~
+              "Funda\u00e7\u00e3o ou Associa\u00e7\u00e3o Domiciliada no Exterior",
             "3220" ~ "Organiza\u00e7\u00e3o Religiosa",
             "3239" ~ "Comunidade Ind\u00edgena",
             "3247" ~ "Fundo Privado",
-            "3255" ~ "\u00d3rg\u00e3o de Dire\u00e7\u00e3o Nacional de Partido Pol\u00edtico",
-            "3263" ~ "\u00d3rg\u00e3o de Dire\u00e7\u00e3o Regional de Partido Pol\u00edtico",
-            "3271" ~ "\u00d3rg\u00e3o de Dire\u00e7\u00e3o Local de Partido Pol\u00edtico",
+            "3255" ~
+              "\u00d3rg\u00e3o de Dire\u00e7\u00e3o Nacional de Partido Pol\u00edtico",
+            "3263" ~
+              "\u00d3rg\u00e3o de Dire\u00e7\u00e3o Regional de Partido Pol\u00edtico",
+            "3271" ~
+              "\u00d3rg\u00e3o de Dire\u00e7\u00e3o Local de Partido Pol\u00edtico",
             "3280" ~ "Comit\u00ea Financeiro de Partido Pol\u00edtico",
             "3298" ~ "Frente Plebiscit\u00e1ria ou Referend\u00e1ria",
             "3306" ~ "Organiza\u00e7\u00e3o Social (OS)",
@@ -2594,7 +2666,8 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
             "4090" ~ "Candidato a Cargo Pol\u00edtico Eletivo",
             "4111" ~ "Leiloeiro",
             "4124" ~ "Produtor Rural (Pessoa F\u00edsica)",
-            "5000" ~ "Organiza\u00e7\u00f5es Internacionais e Outras Institui\u00e7\u00f5es Extraterritoriais",
+            "5000" ~
+              "Organiza\u00e7\u00f5es Internacionais e Outras Institui\u00e7\u00f5es Extraterritoriais",
             "5010" ~ "Organiza\u00e7\u00e3o Internacional",
             "5029" ~ "Representa\u00e7\u00e3o Diplom\u00e1tica Estrangeira",
             "5037" ~ "Outras Institui\u00e7\u00f5es Extraterritoriais",
@@ -2612,7 +2685,10 @@ process_cnes <- function(data, information_system = c("CNES-ST", "CNES-PF"), nom
   data <- droplevels(data)
 
   # Unescape unicode characters
-  data <- suppressWarnings(tibble::as_tibble(lapply(X = data, FUN = stringi::stri_unescape_unicode)))
+  data <- suppressWarnings(tibble::as_tibble(lapply(
+    X = data,
+    FUN = stringi::stri_unescape_unicode
+  )))
 
   # Return
   return(data)

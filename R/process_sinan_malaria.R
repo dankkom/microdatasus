@@ -19,7 +19,7 @@ process_sinan_malaria <- function(data, municipality_data = TRUE) {
   variables_names <- names(data)
 
   # Use dtplyr
-  data <- dtplyr::lazy_dt(data)
+  # data <- dtplyr::lazy_dt(data)
 
   # TP_NOT
   if ("TP_NOT" %in% variables_names) {

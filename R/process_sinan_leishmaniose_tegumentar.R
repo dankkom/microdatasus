@@ -22,7 +22,7 @@ process_sinan_leishmaniose_tegumentar <- function(
   variables_names <- names(data)
 
   # Use dtplyr
-  data <- dtplyr::lazy_dt(data)
+  # data <- dtplyr::lazy_dt(data)
 
   # TP_NOT
   if ("TP_NOT" %in% variables_names) {

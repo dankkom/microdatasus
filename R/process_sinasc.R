@@ -19,7 +19,7 @@ process_sinasc <- function(data, municipality_data = TRUE) {
   variables_names <- names(data)
 
   # Use dtplyr
-  data <- dtplyr::lazy_dt(data)
+  # data <- dtplyr::lazy_dt(data)
 
   # CODINST
   if ("CODINST" %in% variables_names) {
